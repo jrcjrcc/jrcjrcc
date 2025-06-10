@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HerCode - 为美少女设计的编程神器</title>
+    <style>
+        /* 基础样式 */
+        :root {
+            --primary: #f06088;
+            --primary-light: #f8a1b8;
+            --primary-dark: #d94870;
+            --dark: #333;
+            --dark-gray: #666;
+            --gray: #e0e0e0;
+            --light-gray: #f8f8f8;
+            --white: #fff;
+            --text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --box-shadow: 0 4px 16px rgba(240, 96, 136, 0.15);
+            --box-shadow-hover: 0 8px 24px rgba(240, 96, 136, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--white);
+            overflow-x: hidden;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--primary-dark);
+            text-decoration: none;
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--dark-gray);
+        }
+
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: transform 0.8s ease, opacity 0.8s ease;
+        }
+
+        section.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .dark {
+            background-color: var(--light-gray);
+        }
+
+        /* 导航栏样式 */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background-color: white;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .nav.scrolled {
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span:last-child {
+            color: var(--primary);
+        }
+
+        .logo span:nth-child(3) {
+            animation: pulse 2s infinite;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--dark);
+            font-weight: 500;
+            position: relative;
+            padding-bottom: 0.3rem;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            bottom: 0;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-button {
+            display: none;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            position: relative;
+        }
+
+        .mobile-menu-button span {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background-color: var(--dark);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-button span:nth-child(1) {
+            top: 4px;
+        }
+
+        .mobile-menu-button span:nth-child(2) {
+            top: 13px;
+        }
+
+        .mobile-menu-button span:nth-child(3) {
+            top: 22px;
+        }
+
+        .mobile-menu-button.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-button.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-button.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* 英雄区域样式 */
+        .hero {
+            text-align: center;
+            padding: 10rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #ff85a2 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            text-shadow: var(--text-shadow);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 4rem;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+            text-shadow: var(--text-shadow);
+        }
+
+        /* 按钮样式 */
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 8px 24px rgba(240, 96, 136, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(240, 96, 136, 0.4);
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        /* 功能卡片样式 */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--box-shadow);
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* 编辑器样式 */
+        .editor-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+        }
+
+        .editor-column {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--box-shadow);
+            transition: all 0.5s ease;
+        }
+
+        .editor-column:hover {
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .code-editor {
+            width: 100%;
+            height: 350px;
+            padding: 1.2rem;
+            border: 1px solid var(--gray);
+            border-radius: 12px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .code-editor:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(240, 96, 136, 0.2);
+        }
+
+        .output-box {
+            background-color: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: 12px;
+            min-height: 180px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--gray);
+            transition: all 0.3s ease;
+        }
+
+        .output-box:hover {
+            border-color: var(--primary-light);
+        }
+
+        .config-box {
+            background-color: var(--light-gray);
+            padding: 1.2rem;
+            border-radius: 12px;
+            border: 1px solid var(--gray);
+            transition: all 0.3s ease;
+        }
+
+        .config-box:hover {
+            border-color: var(--primary-light);
+        }
+
+        /* 示例按钮样式 */
+        .example-btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            border: 1px solid var(--gray);
+            background-color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .example-btn:hover {
+            background-color: var(--primary-light);
+            color: white;
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(240, 96, 136, 0.15);
+        }
+
+        .example-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(240, 96, 136, 0.2);
+        }
+
+        /* 社区样式 */
+        .community-values {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .value-item {
+            text-align: center;
+            max-width: 220px;
+            transition: all 0.5s ease;
+        }
+
+        .value-item:hover {
+            transform: translateY(-8px);
+        }
+
+        .value-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .value-item:hover .value-icon {
+            transform: scale(1.2);
+        }
+
+        .community-actions {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .community-button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 8px 24px rgba(240, 96, 136, 0.3);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .community-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .community-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(240, 96, 136, 0.4);
+        }
+
+        .community-button:hover::before {
+            left: 100%;
+        }
+
+        .discord {
+            background: linear-gradient(135deg, #7289da 0%, #5b6eae 100%);
+        }
+
+        .wechat {
+            background: linear-gradient(135deg, #25d366 0%, #1da851 100%);
+        }
+
+        /* 页脚样式 */
+        footer {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, var(--dark) 0%, #444 100%);
+            color: white;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* 优化跳转herhub链接样式 */
+        .herhub-link {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(240, 96, 136, 0.3);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .herhub-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .herhub-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(240, 96, 136, 0.4);
+        }
+
+        .herhub-link:hover::before {
+            left: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="nav fixed w-full bg-white shadow-sm transition-all duration-300 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="logo flex items-center">
+                <span class="font-bold text-2xl">Her</span>
+                <span class="font-bold text-2xl text-primary">Code</span>
+                <span class="ml-2 bg-primary text-white text-xs px-2 py-1 rounded-full">美少女专属</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#features" class="font-medium text-dark hover:text-primary transition-colors">特性</a>
+                <a href="#try-now" class="font-medium text-dark hover:text-primary transition-colors">编辑器</a>
+                <a href="#documentation" class="font-medium text-dark hover:text-primary transition-colors">文档</a>
+                <a href="#community" class="font-medium text-dark hover:text-primary transition-colors">社区</a>
+                <a href="#manifesto" class="font-medium text-dark hover:text-primary transition-colors">创办宣言</a>
+            </div>
+            <div class="md:hidden">
+                <button class="mobile-menu-button w-8 h-8 flex flex-col justify-center items-center">
+                    <span class="w-full h-1 bg-dark rounded"></span>
+                    <span class="w-full h-1 bg-dark rounded my-1"></span>
+                    <span class="w-full h-1 bg-dark rounded"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <!-- 英雄区域 -->
+    <section class="hero pt-32 pb-20 bg-gradient-to-br from-primary to-primary-dark text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-bold mb-6 animate-float">用HerCode开启美少女编程之旅</h1>
+            <p class="text-[clamp(1rem,2vw,1.5rem)] mb-10 max-w-3xl mx-auto">专为美少女设计的神仙编程语言和社区，<br>让代码不再有性别边界，每一行都绝绝子到跺jiojio</p>
+            <a href="#try-now" class="cta-button bg-gradient-to-r from-primary to-primary-dark text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                立即体验，做编程界的甜妹
+            </a>
+        </div>
+    </section>
+    <!-- 特性区域 -->
+    <section id="features" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-center mb-12 relative">
+                HerCode语言特性<span class="text-primary">· 美少女专属</span>
+                <div class="absolute w-20 h-1 bg-primary rounded-full bottom-[-10px] left-1/2 transform -translate-x-1/2"></div>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="feature-card bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
+                    <h3 class="text-xl font-semibold mb-3">美少女专属关键字保护</h3>
+                    <p class="text-dark-gray mb-4">Female 作为保留关键字，不能用作变量定义哦~</p>
+                    <pre class="bg-light-gray p-4 rounded-lg text-sm overflow-x-auto">定义 Female = "程序员"  // 会报错哦，美少女才不会这么写</pre>
+                </div>
+                <div class="feature-card bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
+                    <h3 class="text-xl font-semibold mb-3">炒鸡萌的多值传递</h3>
+                    <p class="text-dark-gray mb-4">使用 *vals 和 **emovals 传递心情值~</p>
+                    <pre class="bg-light-gray p-4 rounded-lg text-sm overflow-x-auto">定义 展示心情(*vals, **emovals)
+    对于 心情 在 vals
+        显示 心情
+    结束
+结束</pre>
+                </div>
+                <div class="feature-card bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
+                    <h3 class="text-xl font-semibold mb-3">敲友好的异常处理</h3>
+                    <p class="text-dark-gray mb-4">出错了会说"那咋啦？"，萌到犯规~</p>
+                    <pre class="bg-light-gray p-4 rounded-lg text-sm overflow-x-auto">尝试
+    可能出错的操作()
+捕获
+    显示 "那咋啦？可能是这里有点小问题~"
+结束</pre>
+                </div>
+                <div class="feature-card bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
+                    <h3 class="text-xl font-semibold mb-3">生活感满满的编程</h3>
+                    <p class="text-dark-gray mb-4">用代码管理日常，像发朋友圈一样简单~</p>
+                    <pre class="bg-light-gray p-4 rounded-lg text-sm overflow-x-auto">项目 生活小助手
+    定义 购物清单()
+        清单 = ["奶茶", "面膜", "小裙子", "鲜花"]
+        显示 "今日购物车：" + 清单
+    结束
+    
+    开始
+        调用 购物清单()
+    结束
+结束</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 女性科技工作者展示 -->
+    <section id="women-in-tech" class="py-20 bg-light-gray">
+        <div class="container mx-auto px-4">
+            <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-center mb-12 relative">
+                美少女编程力量<span class="text-primary">· 太绝了</span>
+                <div class="absolute w-20 h-1 bg-primary rounded-full bottom-[-10px] left-1/2 transform -translate-x-1/2"></div>
+            </h2>
+            <p class="text-dark-gray text-center max-w-2xl mx-auto mb-12">在科技圈，美少女的创造力简直yyds！HerCode不仅是编程语言，更是美少女突破次元壁的神器~</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="woman-card bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+                    <div class="card-img h-64 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/girl1/600/400');"></div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">薇薇 · 全栈甜妹</h3>
+                        <p class="text-dark-gray">"一开始以为编程是男生的天下，结果用HerCode写代码也太上头了吧！美少女也能当技术大佬~"</p>
+                    </div>
+                </div>
+                <div class="woman-card bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+                    <div class="card-img h-64 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/girl2/600/400');"></div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Maria · 算法小公举</h3>
+                        <p class="text-dark-gray">"美少女的细腻思维在算法里真的绝绝子，HerCode的语法像闺蜜说话一样好懂，爱了爱了~"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 在线编辑器 -->
+    <section id="try-now" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-center mb-12 relative">
+                HerCode 在线编辑器<span class="text-primary">· 快来玩</span>
+                <div class="absolute w-20 h-1 bg-primary rounded-full bottom-[-10px] left-1/2 transform -translate-x-1/2"></div>
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="editor-column bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300">
+                    <h3 class="text-xl font-semibold mb-6">写HerCode代码啦</h3>
+                    <div class="mb-6 flex flex-wrap gap-3">
+                        <button class="example-btn px-4 py-2 rounded-full bg-primary text-white font-medium transition-all duration-300 hover:shadow-md active" data-category="基础">基础语法</button>
+                        <button class="example-btn px-4 py-2 rounded-full bg-white border border-gray-300 text-dark font-medium transition-all duration-300 hover:bg-primary-light hover:text-white hover:shadow-md" data-category="生活">生活场景</button>
+                        <button class="example-btn px-4 py-2 rounded-full bg-white border border-gray-300 text-dark font-medium transition-all duration-300 hover:bg-primary-light hover:text-white hover:shadow-md" data-category="职场">职场应用</button>
+                        <button class="example-btn px-4 py-2 rounded-full bg-white border border-gray-300 text-dark font-medium transition-all duration-300 hover:bg-primary-light hover:text-white hover:shadow-md" data-category="健康">健康管理</button>
+                    </div>
+                    <textarea id="hercode-editor" class="w-full h-80 p-4 rounded-xl border border-gray-300 bg-light-gray font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-300">项目 示例
+    定义 问候(名字)
+        显示 "你好呀，" + 名字 + "！"
+    结束
+    
+    开始
+        调用 问候("美少女")
+    结束
+结束</textarea>
+                    <button id="run-button" class="cta-button mt-4 bg-gradient-to-r from-primary to-primary-dark text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center">
+                        <i class="fa fa-play-circle mr-2"></i> 运行代码，看效果
+                    </button>
+                </div>
+                <div class="editor-column bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300">
+                    <h3 class="text-xl font-semibold mb-6">输出结果在这里</h3>
+                    <div id="output" class="w-full h-48 p-4 rounded-xl border border-gray-300 bg-light-gray overflow-y-auto text-sm">
+                        <p class="text-primary font-medium">✨ 代码执行结果来啦：</p>
+                        <p class="mt-2">你好呀，美少女！</p>
+                    </div>
+                    <div class="mt-6 p-4 rounded-xl border border-gray-300 bg-light-gray">
+                        <h4 class="font-semibold mb-2">request.her 配置</h4>
+                        <pre class="text-xs font-mono">attitude==0.1.0
+feedback=甜甜的
+language="少女语"</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 文档区域 -->
+    <section id="documentation" class="py-20 bg-light-gray">
+        <div class="container mx-auto px-4">
+            <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-center mb-12 relative">
+                文档与学习<span class="text-primary">· 超详细</span>
+                <div class="absolute w-20 h-1 bg-primary rounded-full bottom-[-10px] left-1/2 transform -translate-x-1/2"></div>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="doc-card bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300">
+                    <h3 class="text-xl font-semibold mb-3">快速上手</h3>
+                    <pre class="bg-light-gray p-4 rounded-lg text-sm overflow-x-auto">项目 我的第一个程序
+    开始
+        显示 "Hello HerCode!"
+    结束
+结束</pre>
+                </div>
+                <div class="doc-card bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300">
+                    <h3 class="text-xl font-semibold mb-3">Random 模块</h3>
+                    <pre class="bg-light-gray p-4 rounded-lg text-sm overflow-x-auto">显示 Random.选择(["奶茶", "咖啡"])
+显示 Random.整数(1, 100)
+显示 Random.心情()</pre>
+                </div>
+                <div class="doc-card bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300">
+                    <h3 class="text-xl font-semibold mb-3">职场小助手</h3>
+                    <pre class="bg-light-gray p-4 rounded-lg text-sm overflow-x-auto">项目 工作狂美少女
+    定义 任务管理(*任务)
+        显示 "今日任务："
+        对于 任务项 在 任务
+            显示 "• " + 任务项
+        结束
+    结束
+    
+    开始
+        调用 任务管理("写代码", "喝奶茶", "见闺蜜")
+    结束
+结束</pre>
+                </div>
+                <div class="doc-card bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300">
+                    <h3 class="text-xl font-semibold mb-3">美少女健康管理</h3>
+                    <pre class="bg-light-gray p-4 rounded-lg text-sm overflow-x-auto">项目 养生小达人
+    定义 经期记录(周期, 上次开始)
+        下次开始 = 计算下次经期(周期, 上次开始)
+        显示 "下次经期预计：" + 下次开始
+    结束
+    
+    开始
+        调用 经期记录(28, "2025-06-01")
+    结束
+结束</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 创办宣言 -->
+    <section id="manifesto" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-center mb-12 relative">
+                HerCode创办宣言<span class="text-primary">· 超有态度</span>
+                <div class="absolute w-20 h-1 bg-primary rounded-full bottom-[-10px] left-1/2 transform -translate-x-1/2"></div>
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    <div class="p-6 bg-light-gray rounded-2xl">
+                        <p class="text-lg font-medium mb-6">"家人们谁懂啊！美少女就该有自己的编程语言——HerCode让代码也能可可爱爱，编程不再是男生的专属~"</p>
+                        <p class="mb-6">HerCode诞生于这样的信念：为美少女打造专属编程世界，语法简单到哭，社区温暖到爆，让每个爱代码的美少女都能闪闪发光~</p>
+                        <h3 class="text-xl font-semibold mb-4">我们的超刚主张：</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <span class="text-primary text-xl mr-2">✨</span>
+                                <span>"美少女的编程天赋绝绝子，才不是只会喝奶茶！"</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-primary text-xl mr-2">✨</span>
+                                <span>"拒绝"女生不适合编程"的刻板印象，美少女学代码超酷的好嘛！"</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-primary text-xl mr-2">✨</span>
+                                <span>"HerCode社区只有甜妹互助，没有下头男指指点点，来了就是一家人~"</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="quote-card bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300">
+                    <p class="text-lg italic text-primary mb-4">"美少女的代码世界就该可可爱爱没有烦恼，HerCode让编程像发朋友圈一样简单~"</p>
+                    <p class="font-semibold text-dark">- HerCode创始人团队</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 社区区域 -->
+    <section id="community" class="py-20 bg-primary/5">
+        <div class="container mx-auto px-4">
+            <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-center mb-12 relative">
+                加入社区<span class="text-primary">· 超有爱</span>
+                <div class="absolute w-20 h-1 bg-primary rounded-full bottom-[-10px] left-1/2 transform -translate-x-1/2"></div>
+            </h2>
+            <p class="text-dark-gray text-center max-w-2xl mx-auto mb-12">HerCode社区是美少女的专属乐园——没有普信男，只有好集美，一起学习编程，成为技术大佬~</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-heart text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">美少女互帮互助</h3>
+                    <p class="text-dark-gray">一起学习进步，解决编程难题，成为技术大佬~</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-gift text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">分享美妆穿搭</h3>
+                    <p class="text-dark-gray">工作之余聊聊时尚、美妆，做个精致的程序员~</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa fa-trophy text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">赢取可爱周边</h3>
+                    <p class="text-dark-gray">参加线上活动，赢取美少女专属的可爱编程周边~</p>
+                </div>
+            </div>
+            <div class="flex flex-wrap justify-center gap-6">
+                <a href="#manifesto" class="community-button bg-gradient-to-r from-primary to-primary-dark text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center">
+                    <i class="fa fa-book mr-2"></i> 看创办宣言，超燃
+                </a>
+                <a href="#" class="community-button bg-gradient-to-r from-[#25d366] to-[#1da851] text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center">
+                    <i class="fa fa-weixin mr-2"></i> 关注公众号，有福利
+                </a>
+            </div>
+            <!-- 优化后的跳转herhub链接 -->
+            <a href="./herHub/upload.html" class="herhub-link">点击跳转herHub</a>
+        </div>
+    </section>
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mb-6">
+                <div class="text-2xl font-bold mb-2">HerCode</div>
+                <p class="text-gray-400">美少女编程神器</p>
+            </div>
+            <p class="text-gray-400">&copy; 2025 HerCode - 代码无性别，美少女最牛</p>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 导航栏滚动效果
+            const nav = document.querySelector('.nav');
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const mobileMenu = document.querySelector('.mobile-menu');
+
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+
+            // 移动端菜单切换
+            mobileMenuButton.addEventListener('click', function() {
+                this.classList.toggle('active');
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // 滚动显示动画
+            const sections = document.querySelectorAll('section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // 示例代码切换
+            const exampleButtons = document.querySelectorAll('.example-btn');
+            const editor = document.getElementById('hercode-editor');
+
+            const examples = {
+                '基础': `项目 示例
+    定义 问候(名字)
+        显示 "你好呀，" + 名字 + "！"
+    结束
+    
+    开始
+        调用 问候("美少女")
+        显示 "HerCode真的绝绝子！"
+    结束
+结束`,
+                '生活': `项目 生活小助手
+    定义 购物清单()
+        清单 = ["奶茶", "面膜", "小裙子", "鲜花"]
+        显示 "今日购物车：" + 清单
+    结束
+    
+    定义 日程提醒(事件, 时间)
+        显示 "⏰ 提醒：" + 事件 + " 在 " + 时间 + " 开始哦"
+    结束
+    
+    定义 心情记录(心情)
+        显示 "今日心情：" + 心情
+        如果 心情 == "开心"
+            显示 "🎉 今天也要元气满满哦！"
+        否则如果 心情 == "难过"
+            显示 "😢 抱抱，一切都会好起来的~"
+        结束
+    结束
+    
+    开始
+        调用 购物清单()
+        调用 日程提醒("逛街", "下午3点")
+        调用 心情记录("开心")
+    结束
+结束`,
+                '职场': `项目 工作狂美少女
+    定义 任务管理(*任务)
+        显示 "今日任务："
+        对于 任务项 在 任务
+            显示 "• " + 任务项
+        结束
+    结束
+    
+    开始
+        调用 任务管理("写代码", "喝奶茶", "见闺蜜")
+    结束
+结束`,
+                '健康': `项目 养生小达人
+    定义 经期记录(周期, 上次开始)
+        下次开始 = 计算下次经期(周期, 上次开始)
+        显示 "下次经期预计：" + 下次开始
+    结束
+    
+    开始
+        调用 经期记录(28, "2025-06-01")
+    结束
+结束`
+            };
+
+            exampleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    exampleButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('bg-primary', 'text-white');
+
+                    // 更新编辑器内容
+                    const category = this.getAttribute('data-category');
+                    editor.value = examples[category];
+
+                    // 添加切换动画
+                    editor.style.opacity = '0.5';
+                    setTimeout(() => {
+                        editor.style.opacity = '1';
+                    }, 300);
+                });
+            });
+
+            // 运行按钮动画
+            const runButton = document.getElementById('run-button');
+            const output = document.getElementById('output');
+
+            runButton.addEventListener('click', function() {
+                // 添加点击动画
+                this.classList.add('scale-95');
+                setTimeout(() => {
+                    this.classList.remove('scale-95');
+                }, 150);
+
+                // 清空输出并显示加载状态
+                output.innerHTML = '<p class="text-primary font-medium">代码执行中...</p>';
+                output.classList.add('animate-pulse');
+
+                // 模拟代码执行
+                setTimeout(() => {
+                    const code = editor.value;
+                    let result;
+
+                    // 简单解析HerCode代码
+                    if (code.includes('显示 "你好呀，" + "美少女" + "！"')) {
+                        result = { type: 'success', output: '你好呀，美少女！' };
+                    } else {
+                        result = { type: 'error', output: '代码执行出错啦，请检查一下哦~' };
+                    }
+
+                    // 显示结果
+                    output.classList.remove('animate-pulse');
+
+                    if (result.type === 'success') {
+                        output.innerHTML = `
+                            <p class="text-primary font-medium">✨ 代码执行结果来啦：</p>
+                            <p class="mt-2">${result.output}</p>
+                        `;
+                    } else if (result.type === 'error') {
+                        output.innerHTML = `
+                            <p class="text-red-500 font-medium">那咋啦？这里可能需要调整哦~</p>
+                            <p class="mt-2 text-red-500">${result.output}</p>
+                        `;
+                    } else {
+                        output.innerHTML = `
+                            <p class="text-gray-600 font-medium">${result.output}</p>
+                        `;
+                    }
+
+                    // 添加结果出现动画
+                    output.style.transform = 'translateY(10px)';
+                    setTimeout(() => {
+                        output.style.transform = 'translateY(0)';
+                    }, 50);
+                }, 1500);
+            });
+
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
