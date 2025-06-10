@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- 让页面宽度适应设备宽度-->
+    <title>中国象棋</title>
+    <link rel="stylesheet" href="style.css">    <!-- 引入样式表-->
+</head>
+<body>
+    <!-- <div id="ai-thinking"></div>-->  <!-- AI思考提示功能弃用 -->
+    <div>
+        <button id="tutorial" onclick="window.location.href='tutorial.html';">返回教程</button>
+        <button id="start" onclick="changeBoard()">切换</button>
+    </div>
+    <a>
+        <h1>追、锥、竭、截的走法</h1>
+        <p>
+            以下为追、锥、竭、截的走法示意图，点击“切换”按钮可以切换到另一示意图，🎈表示了可以吃掉的棋子，尝试操作这些走法，并观察棋盘的变化，然后吃掉🎈！<br>
+            追可以沿着横线、竖线移动且会被阻挡，但是后退时有限制，且吃子时，只能吃前方的棋子。<br>
+            截也可以沿着横线、竖线移动，但是前进时有限制，且吃子时，只能吃邻近的棋子，且被吃时，只能被后方的棋子吃。<br>
+            （🎈每回合会漂浮一次，且不会吃子）
+        </p>
+        <!-- 7*7的棋盘表格 -->
+
+    </a>
+    <table id="chessboard">
+    <script src="scriptz.js"></script>
+    <!-- 在body底部添加 -->
+    <!-- <table id="chessboard2">
+    <script src="scripth2.js"></script> -->
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- 让页面宽度适应设备宽度-->
+    <title>中国象棋</title>
+    <link rel="stylesheet" href="../style.css">    <!-- 引入样式表-->
+</head>
+<body>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <!-- <div id="ai-thinking"></div>-->  <!-- AI思考提示功能弃用 -->
+    <div>
+        <button id="tutorial" onclick="window.location.href='../chinachess.html';">返回游戏</button>
+    </div>
+    <a>
+        <h1>游戏介绍</h1>
+        <h3>
+            这是一款中国象棋变种游戏，在游玩本游戏前，请了解中国象棋或国际象棋的游戏规则！<br>
+            吃掉氓或对手的棋子可以获得分数，分数可以用来召唤强力棋子和天赋！
+        </h3>
+        <h1>棋子的走法</h1>
+        <button id="horse" onclick="window.location.href='horse.html';">傌、馬、骐、骥</button>
+        <button id="elephant" onclick="window.location.href='elephant.html';">象、相、俥、車</button>
+        <button id="general" onclick="window.location.href='general.html';">明、满、兵、卒</button>
+        <button id="advisor" onclick="window.location.href='advisor.html';">仕、士、鋭、鋒</button>
+        <button id="cannon" onclick="window.location.href='cannon.html';">炮、砲、铳、熥</button>
+        <button id="zhui" onclick="window.location.href='zhui.html';">追、锥、截、竭</button>
+        <h1>棋盘的布局</h1>
+    </a>
+    <div id="chessboard"></div>
+    <script src="../script.js"></script>
+</body>
+</html>

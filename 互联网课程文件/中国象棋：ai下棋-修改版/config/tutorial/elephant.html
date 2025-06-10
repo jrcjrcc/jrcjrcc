@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- 让页面宽度适应设备宽度-->
+    <title>中国象棋</title>
+    <link rel="stylesheet" href="style.css">    <!-- 引入样式表-->
+</head>
+<body>
+    <!-- <div id="ai-thinking"></div>-->  <!-- AI思考提示功能弃用 -->
+    <div>
+        <button id="tutorial" onclick="window.location.href='tutorial.html';">返回教程</button>
+        <button id="start" onclick="changeBoard()">切换</button>
+    </div>
+    <a>
+        <h1>相、象、俥、車的走法</h1>
+        <p>
+            相、象的走法是沿着斜线走除了首格以外的格子，且会被阻挡。
+            俥、車的走法是沿着直线走格子，且会被阻挡。
+            （🎈每回合会漂浮一次，且不会吃子）
+        </p>
+        <!-- 7*7的棋盘表格 -->
+
+    </a>
+    <table id="chessboard">
+    <script src="scripte.js"></script>
+    <!-- 在body底部添加 -->
+    <!-- <table id="chessboard2">
+    <script src="scripth2.js"></script> -->
+</body>
+</html>

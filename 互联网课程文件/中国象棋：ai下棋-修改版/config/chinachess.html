@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- 让页面宽度适应设备宽度-->
+    <title>中国象棋</title>
+    <link rel="stylesheet" href="style.css">    <!-- 引入样式表-->
+</head>
+<body>
+    <!-- <div id="ai-thinking"></div>-->  <!-- AI思考提示功能弃用 -->
+    <div id="playerScore">
+        <button id="tutorial" onclick="tutorial()">游戏教程</button>
+        <!-- <div id="playerScore"></div> -->
+    </div>
+    <button id="gainTalent" onclick="gainTalent()" style="display: none;">召唤棋子</button>
+    <div id="chessboard"></div>  <!-- 放置棋盘-->
+    <!-- <div id="myElement"></div>  放置提示信息 -->
+    <script src="script.js"></script>  <!-- 引入脚本文件-->
+</body>
+</html>

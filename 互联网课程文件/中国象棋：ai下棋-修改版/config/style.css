@@ -1,0 +1,47 @@
+.highlight {
+    background-color: #ffcc00;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    gap: 10px;
+    background-color: #f0f0f0;
+}
+
+#chessboard {
+    display: grid;
+    grid-template-columns: repeat(13, 7vh);    /* 13 columns, each 70px wide */
+    grid-template-rows: repeat(13, 7vh);    /* 13 rows, each 70px high */
+    gap: 1px;
+}
+
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #000;
+    font-size: 2vh;
+    font-weight: bold;
+}
+
+.cell.black {
+    background-color: #ececec00;
+}
+
+.black {
+    color: black;
+    background-color: #d8d8d8;
+}
+.red {
+    color: red;
+    background-color: #fff3d8;
+}
+.purple {
+    color: purple;
+    background-color: #d8d8ff;
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- 让页面宽度适应设备宽度-->
+    <title>中国象棋</title>
+    <link rel="stylesheet" href="style.css">    <!-- 引入样式表-->
+</head>
+<body>
+    <!-- <div id="ai-thinking"></div>-->  <!-- AI思考提示功能弃用 -->
+    <div>
+        <button id="tutorial" onclick="window.location.href='tutorial.html';">返回教程</button>
+        <button id="start" onclick="changeBoard()">切换</button>
+    </div>
+    <a>
+        <h1>明、满、兵、卒的走法</h1>
+        <p>
+            兵、卒的走法是沿着前方走1~2格子，或横着走1格子，且会被阻挡，在未到达对手半场时，只能向前走。<br>
+            明、满的走法是沿着直线/斜线走1格子，且会被阻挡。<br>
+            （🎈每回合会漂浮一次，且不会吃子）
+        </p>
+        <!-- 7*7的棋盘表格 -->
+
+    </a>
+    <table id="chessboard">
+    <script src="scriptg.js"></script>
+    <!-- 在body底部添加 -->
+    <!-- <table id="chessboard2">
+    <script src="scripth2.js"></script> -->
+</body>
+</html>
