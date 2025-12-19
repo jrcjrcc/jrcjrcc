@@ -1,0 +1,5 @@
+name: "astrbot_plugin_bo"
+version: v1.0.0 
+author: anchor 
+desc: 回合制文字对战插件波集  
+repository: https://github.com/anchorAnc/astrbot_plugin_bo  
